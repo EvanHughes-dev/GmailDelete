@@ -7,11 +7,10 @@ from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 
 
-def create_service(client_secret_file,
-                   api_name,
-                   api_version,
-                   *scopes,
-                   prefix=''):
+
+
+
+def create_service(client_secret_file, api_name, api_version, *scopes, prefix=''):
   CLIENT_SECRET_FILE = client_secret_file
   API_SERVICE_NAME = api_name
   API_VERSION = api_version
@@ -39,7 +38,7 @@ def create_service(client_secret_file,
       flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE,
                                                        SCOPES)
       creds = flow.run_local_server(port=0)
-
+#create file
     with open(os.path.join(working_dir, token_dir, token_file), 'w') as token:
       token.write(creds.to_json())
 
@@ -58,5 +57,31 @@ def create_service(client_secret_file,
 
 
 def convert_to_RFC_datetime(year=1900, month=1, day=1, hour=0, minute=0):
-  dt = datetime.datetime(year, month, day, hour, minute, 0).isoformat() + 'Z'
-  return dt
+    dt = datetime.datetime(year, month, day, hour, minute, 0).isoformat() + 'Z'
+    return dt
+
+
+def check_connection(api_name, api_version, prefix=''):
+    API_SERVICE_NAME = api_name
+    API_VERSION = api_version
+
+    working_dir = os.getcwd()
+    token_dir = 'token files'
+    token_file = f'token_{API_SERVICE_NAME}_{API_VERSION}{prefix}.json'
+    print(os.path.join(working_dir, token_dir, token_file))
+    if os.path.exists(os.path.join(working_dir, token_dir, token_file)):
+        return True
+    else:
+        return False
+
+
+def remove_login(api_name, api_version, prefix=''):
+    API_SERVICE_NAME = api_name
+    API_VERSION = api_version
+
+    working_dir = os.getcwd()
+    token_dir = 'token files'
+    token_file = f'token_{API_SERVICE_NAME}_{API_VERSION}{prefix}.json'
+    if os.path.exists(os.path.join(working_dir, token_dir, token_file)):
+        os.remove(os.path.join(working_dir, token_dir, token_file))
+
