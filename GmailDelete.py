@@ -69,11 +69,12 @@ def save_new_white_name(nameOBJ):
 
 def create_inputs(main_window):
 
-
     right_frame = Frame(main_window, width=650, height=400, bg='grey')
     right_frame.grid(row=0, column=0, padx=10, pady=5)
 
-    add_word_frame = Frame(main_window, width=100, height=100, bg='grey')
+    bigger_add_word_frame = Frame(main_window, width=150, height=100, bg='#3f929e')
+    bigger_add_word_frame.grid(row=0, column=2, padx=10, pady=5)
+    add_word_frame = Frame(bigger_add_word_frame, width=100, height=100, bg='#65979e')
     add_word_frame.grid(row=0, column=2, padx=10, pady=5)
 
     # create an input field for black phrases
