@@ -2,6 +2,7 @@ import time
 import base64
 from tkinter import *
 import GoogleConnect as GoogleAccess
+import list_search as get_key_words
 
 
 CLIENT_FILE = 'client-secret.json'
@@ -13,6 +14,8 @@ Key_Words_Delet = ["unsubscribe", "college", "alerts", "university"]
 Key_Words_Keep = ["champlain", "drexel", "pitt", "rochester"]
 is_logged_in: bool = False
 
+get_key_words.check_folder() # check if the directory exists
+get_key_words.check_files() # check if the files exists
 
 def create_empty_window():
     CreatedWindowObject = Tk()
@@ -51,21 +54,39 @@ def create_logout(main_window):
 
     return main_window
 
+
 def save_new_black_name(nameOBJ):
     textValue = nameOBJ.get()
+    get_key_words.add_data_black(textValue)
+    nameOBJ.delete(0, END)
+
+
+def save_new_white_name(nameOBJ):
+    textValue = nameOBJ.get()
+    get_key_words.add_data_white(textValue)
+    nameOBJ.delete(0, END)
 
 
 def create_inputs(main_window):
-    center_frame= Frame(main_window, width=100, height=100)
-    center_frame.grid(row=0, column=0, padx=10, pady=5)
+
+
+    right_frame = Frame(main_window, width=650, height=400, bg='grey')
+    right_frame.grid(row=0, column=0, padx=10, pady=5)
+
+    add_word_frame = Frame(main_window, width=100, height=100, bg='grey')
+    add_word_frame.grid(row=0, column=2, padx=10, pady=5)
 
     # create an input field for black phrases
-    Label(center_frame, text="Create Black Word").grid(row=1, column=0, padx=10, pady=5)
-    black_entry = Entry(center_frame, bd=5)
-    black_entry.grid(row=1, column=1, padx=10, pady=5)
-    Button(center_frame, text="Press to add", command=lambda: save_new_black_name(black_entry), bd=5).grid(row=1, column=2, padx=10, pady=5)
+    Label(add_word_frame, text="Create Black Word").grid(row=3, column=0, padx=10, pady=5)
+    black_entry = Entry(add_word_frame, bd=5)
+    black_entry.grid(row=3, column=1, padx=10, pady=5)
+    Button(add_word_frame, text="Press to add", command=lambda: save_new_black_name(black_entry), bd=5).grid(row=3, column=2, padx=10, pady=5)
 
     # do same for white
+    Label(add_word_frame, text="Create white Word").grid(row=4, column=0, padx=10, pady=5)
+    white_entry = Entry(add_word_frame, bd=5)
+    white_entry.grid(row=4, column=1, padx=10, pady=5)
+    Button(add_word_frame, text="Press to add", command=lambda: save_new_white_name(white_entry), bd=5).grid(row=4, column=2, padx=10, pady=5)
     return main_window
 
 
@@ -73,7 +94,10 @@ def display_options():
     window = create_empty_window()
     window = create_logout(window)
     window = create_inputs(window)
+    window.state('zoomed')
+    window.title("Gmail Spam Deleter")
     window.mainloop()
+
 
 # </editor-fold>
 
@@ -143,7 +167,7 @@ def check_all_data(part, email_result):
 def check_for_text(gmail_service, data, email_result):
     byte_code = base64.urlsafe_b64decode(data)
 
-    deleted_count = 0;
+    deleted_count = 0
     text = byte_code.decode("utf-8")
     text = str(text)
     text = text.lower()
