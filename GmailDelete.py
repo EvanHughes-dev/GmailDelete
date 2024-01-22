@@ -1,9 +1,11 @@
 import time
 import base64
 from tkinter import *
+
+import GoogleConnect
 import GoogleConnect as GoogleAccess
 import list_search as get_key_words
-
+from tkcalendar import Calendar, DateEntry
 
 CLIENT_FILE = 'client-secret.json'
 API_NAME = 'gmail'
@@ -16,6 +18,10 @@ is_logged_in: bool = False
 
 get_key_words.check_folder() # check if the directory exists
 get_key_words.check_files() # check if the files exists
+
+
+def create_gmail_services():
+    return GoogleAccess.create_service(CLIENT_FILE, API_NAME, API_VERSION, SCOPES)
 
 def create_empty_window():
     CreatedWindowObject = Tk()
@@ -67,17 +73,58 @@ def save_new_white_name(nameOBJ):
     nameOBJ.delete(0, END)
 
 
-def create_inputs(main_window):
+def create_frames(main_window):
+    main_body_color = 'red'
+
+    main_body = Frame(main_window, width=main_window.winfo_screenwidth()/4, height=main_window.winfo_screenheight()/3, bg=main_body_color)
+    main_body.grid(row=0, column=1, padx=10, pady=5)
+    main_body.grid_propagate(0)
+
+    main_body = create_header(main_body, main_body_color)
+    main_body = create_body_options(main_body)
 
     right_frame = Frame(main_window, width=650, height=400, bg='grey')
     right_frame.grid(row=0, column=0, padx=10, pady=5)
 
     bigger_add_word_frame = Frame(main_window, width=150, height=100, bg='#3f929e')
     bigger_add_word_frame.grid(row=0, column=2, padx=10, pady=5)
+
     add_word_frame = Frame(bigger_add_word_frame, width=100, height=100, bg='#65979e')
     add_word_frame.grid(row=0, column=2, padx=10, pady=5)
 
-    # create an input field for black phrases
+    add_word_frame = create_buttons(add_word_frame)
+
+    return main_window
+
+def create_header(main_body, main_body_color):
+
+    header_width_sides = main_body.winfo_screenwidth()/16
+    header_width_center = main_body.winfo_screenwidth()/8
+
+    header_height = main_body.winfo_screenheight()/21
+
+    main_body_header_color = "green"
+
+    status_frame = Frame(main_body, width=main_body.winfo_screenwidth()/4, height=header_height, bg=main_body_color)
+    status_frame.grid(row=0, column=0, columnspan=5)
+    current_status = Label(status_frame, text="No Current Operations", bg=main_body_color)
+    current_status.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+    Frame(main_body, width=header_width_sides, height=header_height, bg=main_body_color).grid(row=1, column=0)
+
+    main_body_header = Frame(main_body, width=header_width_center, height= header_height, bg=main_body_header_color)
+    main_body_header.grid(row=1, column=1, columnspan=3)
+    main_body_header.grid_propagate(0)
+    Label(main_body_header, text="Test", bg=main_body_header_color).place(relx=0.5, rely=0.5, anchor=CENTER)
+
+    Frame(main_body, width=header_width_sides, height= header_height, bg=main_body_color).grid(row=1, column=4)
+
+    return main_body
+
+
+def create_buttons(add_word_frame):
+
+     # create an input field for black phrases
     Label(add_word_frame, text="Create Black Word").grid(row=3, column=0, padx=10, pady=5)
     black_entry = Entry(add_word_frame, bd=5)
     black_entry.grid(row=3, column=1, padx=10, pady=5)
@@ -88,13 +135,25 @@ def create_inputs(main_window):
     white_entry = Entry(add_word_frame, bd=5)
     white_entry.grid(row=4, column=1, padx=10, pady=5)
     Button(add_word_frame, text="Press to add", command=lambda: save_new_white_name(white_entry), bd=5).grid(row=4, column=2, padx=10, pady=5)
-    return main_window
 
+    return add_word_frame
+
+
+def create_body_options(main_body):
+
+    Button(main_body, text="Delete By Content").grid(row=2, column=0, pady=5)
+    Button(main_body, text="Clear Words").grid(row=2, column=1)
+    date = DateEntry(main_body, background= "magenta3", foreground= "white", bd=2)
+    date.grid(row=2, column=2, columnspan=2)
+
+
+    Button(main_body, text="Delete By Date", command=lambda: delete_by_year(date.get_date().strftime("%m/%d/%Y"))).grid(row=2, column=4)
+    return main_body
 
 def display_options():
     window = create_empty_window()
     window = create_logout(window)
-    window = create_inputs(window)
+    window = create_frames(window)
     window.state('zoomed')
     window.title("Gmail Spam Deleter")
     window.mainloop()
@@ -138,12 +197,18 @@ def search_emails(gmail_service, query, labels=None):
 
 # <editor-fold desc="Specific Search">
 
-def delete_by_year(email_results, gmail_service):
-    query = "before:2022/10/20"
-    email_result = search_emails(query)
+def delete_by_year(time):
+    print(type(time))
+    gmail_service=create_gmail_services()
+    query = "before:"+time
+    email_results = search_emails(gmail_service, query)
+    print(email_results)
+
     for email_result in email_results:
+
         gmail_service.users().messages().trash(userId='me',
                                                id=email_result['id']).execute()
+        time.sleep(0.5)
 
 
 def check_all_data(part, email_result):
@@ -199,6 +264,8 @@ if not GoogleAccess.check_connection(API_NAME, API_VERSION):
 else:
     display_options()
 # email_results = search_emails("")  # nothing specific in query
+
+
 
 
 # Step 2. delete emails
