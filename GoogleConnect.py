@@ -6,11 +6,11 @@ from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 
-
-
-
-
-def create_service(client_secret_file, api_name, api_version, *scopes, prefix=''):
+def create_service(client_secret_file,
+                   api_name,
+                   api_version,
+                   *scopes,
+                   prefix=''):
   CLIENT_SECRET_FILE = client_secret_file
   API_SERVICE_NAME = api_name
   API_VERSION = api_version
@@ -37,7 +37,14 @@ def create_service(client_secret_file, api_name, api_version, *scopes, prefix=''
     else:
       flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE,
                                                        SCOPES)
-      creds = flow.run_local_server(port=0)
+
+      creds = flow.run_local_server(port=0,
+                                    authorization_prompt_message='Please visit this URL: {url}',
+                                    success_message='The auth flow is complete; you may close this window.',
+                                    open_browser=True,
+                                    access_type = 'offline',
+                                    prompt = 'consent'
+                                    )
 #create file
     with open(os.path.join(working_dir, token_dir, token_file), 'w') as token:
       token.write(creds.to_json())
@@ -68,7 +75,7 @@ def check_connection(api_name, api_version, prefix=''):
     working_dir = os.getcwd()
     token_dir = 'token files'
     token_file = f'token_{API_SERVICE_NAME}_{API_VERSION}{prefix}.json'
-    print(os.path.join(working_dir, token_dir, token_file))
+
     if os.path.exists(os.path.join(working_dir, token_dir, token_file)):
         return True
     else:

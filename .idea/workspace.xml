@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="962c8125-f718-432a-b4f6-37577f538a4f" name="Changes" comment="small">
+    <list default="true" id="962c8125-f718-432a-b4f6-37577f538a4f" name="Changes" comment="update to word systems">
+      <change beforePath="$PROJECT_DIR$/.idea/GmailDelete.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GmailDelete.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GmailDelete.py" beforeDir="false" afterPath="$PROJECT_DIR$/GmailDelete.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/list_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/list_search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/word_search/wordList.json" beforeDir="false" afterPath="$PROJECT_DIR$/word_search/wordList.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GoogleConnect.py" beforeDir="false" afterPath="$PROJECT_DIR$/GoogleConnect.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +82,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705930620900</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="update to word systems">
+      <option name="closed" value="true" />
+      <created>1706104807931</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1706104807931</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -112,6 +121,34 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="small" />
-    <option name="LAST_COMMIT_MESSAGE" value="small" />
+    <MESSAGE value="update to word systems" />
+    <option name="LAST_COMMIT_MESSAGE" value="update to word systems" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GoogleConnect.py</url>
+          <line>48</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/AppData/Roaming/Python/Python311/site-packages/oauthlib/oauth2/rfc6749/parameters.py</url>
+          <line>439</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/AppData/Roaming/Python/Python311/site-packages/oauthlib/oauth2/rfc6749/parameters.py</url>
+          <line>440</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="WordSearch" />
+        <watch expression="text" language="Python" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

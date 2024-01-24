@@ -12,14 +12,30 @@ API_NAME = 'gmail'
 API_VERSION = 'v1'
 SCOPES = ['https://mail.google.com/']
 
-Key_Words_Delet = ["unsubscribe", "college", "alerts", "university"]
-Key_Words_Keep = ["champlain", "drexel", "pitt", "rochester"]
+
 is_logged_in: bool = False
 
 get_key_words.check_folder() # check if the directory exists
 get_key_words.check_files() # check if the files exists
 
+def check_delete(email_results, gmail_service):
+    total_count = len(email_results)
+    current_count = 0
+    deleted_count = 0
+    for email_result in email_results:
+        current_count += 1;
+        print(f"{100 * (current_count / total_count)}%...");
 
+        try:
+            msg = gmail_service.users().messages().get(userId='me', id=email_result['id']).execute()
+
+            deleted_count += check_all_data( gmail_service, msg, email_result);
+
+
+        except Exception as error:
+            print(f'An error occurred: {error}')
+
+    print(f'There were a total of {total_count} messages and {deleted_count} message deleted')
 
 def create_gmail_services():
     return GoogleAccess.create_service(CLIENT_FILE, API_NAME, API_VERSION, SCOPES)
@@ -148,7 +164,7 @@ def create_buttons(add_word_frame, main_window):
 
 def create_body_options(main_body):
 
-    Button(main_body, text="Delete By Content").grid(row=2, column=0, pady=5)
+    Button(main_body, text="Delete By Content", command=lambda: delete_by_content()).grid(row=2, column=0, pady=5)
     Button(main_body, text="Clear Words").grid(row=2, column=1)
     date = DateEntry(main_body, background= "magenta3", foreground= "white", bd=2)
     date.grid(row=2, column=2, columnspan=2)
@@ -262,7 +278,6 @@ def delete_by_year(time):
     gmail_service = create_gmail_services()
     query = "before:"+time
     email_results = search_emails(gmail_service, query)
-    print(email_results)
 
     for email_result in email_results:
 
@@ -270,21 +285,26 @@ def delete_by_year(time):
                                                id=email_result['id']).execute()
         time.sleep(0.5)
 
+def delete_by_content():
+    gmail_service = create_gmail_services()
+    query = ""
 
-def check_all_data(part, email_result):
+    email_results = search_emails(gmail_service, query)
+    check_delete(email_results, gmail_service)
+def check_all_data(gmail_service,part, email_result):
     value = 0;
     if "body" in part:
         if "data" in part["body"]:
-            value += check_for_text(part['body']["data"], email_result)
+            value += check_for_text(gmail_service, part['body']["data"], email_result)
         elif "parts" in part:
             for item in part["parts"]:
-                value += check_all_data(item, email_result)
+                value += check_all_data(gmail_service, item, email_result)
     elif "data" in part["payload"]["body"]:
-        value += check_for_text(part["payload"]["body"]["data"], email_result);
+        value += check_for_text(gmail_service, part["payload"]["body"]["data"], email_result);
     elif "parts" in part["payload"]:
 
         for item in part["payload"]["parts"]:
-            value += check_all_data(item, email_result)
+            value += check_all_data(gmail_service, item, email_result)
             if value >= 1:
                 break;
     return value;
@@ -297,18 +317,27 @@ def check_for_text(gmail_service, data, email_result):
     text = byte_code.decode("utf-8")
     text = str(text)
     text = text.lower()
-    for WordSearch in Key_Words_Delet:
-        deleted = False;
-        found_key = True;
-        try:
-            if text.find(WordSearch):
+    key_words_delete = get_key_words.read_files()['black']
+    key_words_keep = get_key_words.read_files()['white']
 
-                for WordSearchGood in Key_Words_Keep:
+    for WordSearch in key_words_delete:
+
+        found_key = False
+        WordSearch = WordSearch.lower()
+
+        try:
+
+            if not text.find(WordSearch) == -1:
+                found_key = True
+
+                for WordSearchGood in key_words_keep:
+                    WordSearchGood = WordSearchGood.lower()
                     if not text.find(WordSearchGood) == -1:
-                        found_key = False;
-                        break;
-            if found_key == True and deleted == False:
+                        found_key = False
+                        break
+            if found_key == True:
                 deleted_count = 1
+
                 gmail_service.users().messages().trash(userId='me',
                                                        id=email_result['id']).execute()
                 break;
@@ -329,21 +358,4 @@ else:
 
 
 # Step 2. delete emails
-def check_delete(email_results, gmail_service):
-    total_count = len(email_results)
-    current_count = 0
-    deleted_count = 0
-    for email_result in email_results:
-        current_count += 1;
-        print(f"{100 * (current_count / total_count)}%...");
 
-        try:
-            msg = gmail_service.users().messages().get(userId='me', id=email_result['id']).execute()
-
-            deleted_count += check_all_data(msg, email_result);
-
-
-        except Exception as error:
-            print(f'An error occurred: {error}')
-
-    print(f'There were a total of {total_count} messages and {deleted_count} message deleted')
