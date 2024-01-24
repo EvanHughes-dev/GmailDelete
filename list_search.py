@@ -52,3 +52,9 @@ def add_data_black(value):
     with open(word_list_path, "w") as f:
         json.dump(data, f)
 
+def delete_word(value_to_delete, list):
+    with open(word_list_path, "r") as f:
+        data = json.load(f)
+    data[list].remove(value_to_delete)
+    with open(word_list_path, "w") as f:
+        json.dump(data, f)

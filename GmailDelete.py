@@ -20,6 +20,7 @@ get_key_words.check_folder() # check if the directory exists
 get_key_words.check_files() # check if the files exists
 
 
+
 def create_gmail_services():
     return GoogleAccess.create_service(CLIENT_FILE, API_NAME, API_VERSION, SCOPES)
 
@@ -32,6 +33,7 @@ def create_empty_window():
 def create_login(main_window):
     GoogleAccess.create_service(CLIENT_FILE, API_NAME, API_VERSION, SCOPES)
     main_window.destroy()
+    display_options()
 
 
 def create_button(main_window):
@@ -41,7 +43,7 @@ def create_button(main_window):
 
 
 def login():
-    window = create_empty_window();
+    window = create_empty_window()
     window = create_button(window)
     window.mainloop()
 
@@ -56,21 +58,22 @@ def log_out(window):
 
 # <editor-fold desc="Display Options>
 def create_logout(main_window):
-    button = Button(main_window, text="Click to Logout", command=lambda: log_out(main_window), activebackground="#ff8aba")
-
+    Button(main_window, text="Click to Logout", command=lambda: log_out(main_window), activebackground="#ff8aba").grid(row=1, column=1)
     return main_window
 
 
-def save_new_black_name(nameOBJ):
+def save_new_black_name(nameOBJ, main_window):
     textValue = nameOBJ.get()
     get_key_words.add_data_black(textValue)
     nameOBJ.delete(0, END)
+    change_words(main_window)
 
 
-def save_new_white_name(nameOBJ):
+def save_new_white_name(nameOBJ, main_window):
     textValue = nameOBJ.get()
     get_key_words.add_data_white(textValue)
     nameOBJ.delete(0, END)
+    change_words(main_window)
 
 
 def create_frames(main_window):
@@ -83,17 +86,22 @@ def create_frames(main_window):
     main_body = create_header(main_body, main_body_color)
     main_body = create_body_options(main_body)
 
-    right_frame = Frame(main_window, width=650, height=400, bg='grey')
-    right_frame.grid(row=0, column=0, padx=10, pady=5)
-
     bigger_add_word_frame = Frame(main_window, width=150, height=100, bg='#3f929e')
     bigger_add_word_frame.grid(row=0, column=2, padx=10, pady=5)
 
     add_word_frame = Frame(bigger_add_word_frame, width=100, height=100, bg='#65979e')
     add_word_frame.grid(row=0, column=2, padx=10, pady=5)
 
-    add_word_frame = create_buttons(add_word_frame)
+    add_word_frame = create_buttons(add_word_frame, main_window)
 
+    return main_window
+
+def create_word_display_frame(main_window):
+    left_frame = Frame(main_window, width=650, height=400, bg='grey')
+    left_frame.grid(row=0, column=0, padx=10, pady=5)
+
+    left_frame.grid_propagate(0)
+    left_frame = display_words(left_frame, main_window)
     return main_window
 
 def create_header(main_body, main_body_color):
@@ -122,19 +130,18 @@ def create_header(main_body, main_body_color):
     return main_body
 
 
-def create_buttons(add_word_frame):
-
-     # create an input field for black phrases
+def create_buttons(add_word_frame, main_window):
+    # create an input field for black phrases
     Label(add_word_frame, text="Create Black Word").grid(row=3, column=0, padx=10, pady=5)
     black_entry = Entry(add_word_frame, bd=5)
     black_entry.grid(row=3, column=1, padx=10, pady=5)
-    Button(add_word_frame, text="Press to add", command=lambda: save_new_black_name(black_entry), bd=5).grid(row=3, column=2, padx=10, pady=5)
+    Button(add_word_frame, text="Press to add", command=lambda: save_new_black_name(black_entry, main_window), bd=5).grid(row=3, column=2, padx=10, pady=5)
 
     # do same for white
     Label(add_word_frame, text="Create white Word").grid(row=4, column=0, padx=10, pady=5)
     white_entry = Entry(add_word_frame, bd=5)
     white_entry.grid(row=4, column=1, padx=10, pady=5)
-    Button(add_word_frame, text="Press to add", command=lambda: save_new_white_name(white_entry), bd=5).grid(row=4, column=2, padx=10, pady=5)
+    Button(add_word_frame, text="Press to add", command=lambda: save_new_white_name(white_entry, main_window), bd=5).grid(row=4, column=2, padx=10, pady=5)
 
     return add_word_frame
 
@@ -146,17 +153,71 @@ def create_body_options(main_body):
     date = DateEntry(main_body, background= "magenta3", foreground= "white", bd=2)
     date.grid(row=2, column=2, columnspan=2)
 
-
     Button(main_body, text="Delete By Date", command=lambda: delete_by_year(date.get_date().strftime("%m/%d/%Y"))).grid(row=2, column=4)
     return main_body
+
 
 def display_options():
     window = create_empty_window()
     window = create_logout(window)
     window = create_frames(window)
+    window=create_word_display_frame(window)
     window.state('zoomed')
     window.title("Gmail Spam Deleter")
     window.mainloop()
+
+
+def display_words(frame, window):
+    word_date = get_key_words.read_files()
+
+    white_word_data = word_date["white"]
+    black_word_data = word_date["black"]
+
+
+    frame = return_frames_for_list(frame, white_word_data, "white", window)
+    frame = return_frames_for_list(frame, black_word_data, "black", window)
+
+    return frame
+
+
+def return_frames_for_list(frame, list, white_black, window):
+
+    current_row = 1
+    current_column = 0
+
+    header_font_size= 20
+    body_font_size = 17
+
+    padding_y_header = 1
+    padding_x_header = 4
+
+    padding_y_body = 2
+    padding_x_body = 1
+
+    if white_black=="white":
+        Label(frame, text="White List", font=header_font_size).grid(row=0, column=current_column, pady=padding_y_header, padx=padding_x_header, columnspan = 2)
+    else:
+        current_column=2
+        Label(frame, text="Black List", font=header_font_size).grid(row=0, column=current_column, pady=padding_y_header, padx=padding_x_header, columnspan = 2)
+
+    for item in list:
+        newLabel=Label(frame, text=item, font = body_font_size)
+        newLabel.grid(row=current_row, column=current_column, pady= padding_y_body, padx= padding_x_body)
+        Button(frame, text="X", bg="red", command = lambda: delete_word(item, white_black, window)).grid(row=current_row, column=current_column+1, pady=padding_y_body, padx=padding_x_body)
+        current_row += 1
+
+    return frame
+
+
+def delete_word(item, white_black, window):
+    get_key_words.delete_word(item, white_black)
+    change_words(window)
+
+
+def change_words(window):
+    window = create_word_display_frame(window)
+    
+
 
 
 # </editor-fold>
@@ -198,8 +259,7 @@ def search_emails(gmail_service, query, labels=None):
 # <editor-fold desc="Specific Search">
 
 def delete_by_year(time):
-    print(type(time))
-    gmail_service=create_gmail_services()
+    gmail_service = create_gmail_services()
     query = "before:"+time
     email_results = search_emails(gmail_service, query)
     print(email_results)
