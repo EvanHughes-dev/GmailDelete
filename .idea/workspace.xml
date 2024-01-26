@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="962c8125-f718-432a-b4f6-37577f538a4f" name="Changes" comment="update to word systems">
-      <change beforePath="$PROJECT_DIR$/.idea/GmailDelete.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GmailDelete.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GmailDelete.py" beforeDir="false" afterPath="$PROJECT_DIR$/GmailDelete.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GoogleConnect.py" beforeDir="false" afterPath="$PROJECT_DIR$/GoogleConnect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/list_search.py" beforeDir="false" afterPath="$PROJECT_DIR$/list_search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/word_search/wordList.json" beforeDir="false" afterPath="$PROJECT_DIR$/word_search/wordList.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +89,23 @@
       <option name="project" value="LOCAL" />
       <updated>1706104807931</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="update to word systems">
+      <option name="closed" value="true" />
+      <created>1706134051666</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1706134051666</updated>
+    </task>
+    <task id="LOCAL-00004" summary="update to word systems">
+      <option name="closed" value="true" />
+      <created>1706134083461</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1706134083461</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -127,11 +142,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/GoogleConnect.py</url>
-          <line>48</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$USER_HOME$/AppData/Roaming/Python/Python311/site-packages/oauthlib/oauth2/rfc6749/parameters.py</url>
           <line>439</line>

@@ -33,21 +33,11 @@ def read_files():
     return data
 
 
-def add_data_white(value):
+def add_word_new(value, color):
     with open(word_list_path, "r") as f:
         data = json.load(f)
 
-    data["white"].append(value)
-
-    with open(word_list_path, "w") as f:
-        json.dump(data, f)
-
-
-def add_data_black(value):
-    with open(word_list_path, "r") as f:
-        data = json.load(f)
-
-    data["black"].append(value)
+    data[color].append(value)
 
     with open(word_list_path, "w") as f:
         json.dump(data, f)
