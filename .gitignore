@@ -1,4 +1,5 @@
 /.idea/
-/_pycache_/
+/__pycache__/
 /word_search/
+/token files/
 
