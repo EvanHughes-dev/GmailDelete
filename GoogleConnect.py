@@ -18,7 +18,7 @@ def create_service(client_secret_file,
 
   creds = None
   working_dir = os.getcwd()
-  token_dir = 'token files'
+  token_dir = 'token_files'
   token_file = f'token_{API_SERVICE_NAME}_{API_VERSION}{prefix}.json'
 
   ### Check if token dir exists first, if not, create the folder
