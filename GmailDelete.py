@@ -27,7 +27,10 @@ def create_empty_window():
     return created_window_object
 
 
-# <editor-fold desc="Login">
+# ---------------------------------------------------------------------------- #
+# -------------------------------- Login Logic ------------------------------- #
+# ---------------------------------------------------------------------------- #
+
 def create_login(main_window):
     GoogleAccess.create_service(CLIENT_FILE, API_NAME, API_VERSION, SCOPES)
     main_window.destroy()
@@ -52,10 +55,10 @@ def log_out(window):
     window.destroy()
     login()
 
-# </editor-fold>>
 
-# <editor-fold desc="Display Options">
-
+# ---------------------------------------------------------------------------- #
+# ------------------------------- Options Menu ------------------------------- #
+# ---------------------------------------------------------------------------- #
 
 def create_logout(main_window):
     Button(main_window, text="Click to Logout", command=lambda: log_out(main_window),
@@ -218,10 +221,9 @@ def delete_word(item, white_black, window):
 def change_words(window):
     create_word_display_frame(window)
 
-# </editor-fold>
-
-# <editor-fold desc="search email">
-
+# ---------------------------------------------------------------------------- #
+# ------------------------------- Search Emails ------------------------------ #
+# ---------------------------------------------------------------------------- #s
 
 def search_emails(gmail_service, query, labels=None):
     # email_messages = []
@@ -250,10 +252,6 @@ def search_emails(gmail_service, query, labels=None):
 
     return email_messages
 
-
-# </editor-fold>
-
-# <editor-fold desc="Specific Search">
 def check_delete(email_results, gmail_service):
     total_count = len(email_results)
     current_count = 0
@@ -347,8 +345,6 @@ def check_for_text(gmail_service, data, email_result):
             print(f'An error occurred: {error}')
 
     return deleted_count
-# </editor-fold>
-
 
 if not GoogleAccess.check_connection(API_NAME, API_VERSION):
     login()
