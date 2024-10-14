@@ -3,7 +3,7 @@ import json
 
 list_dir = "word_search"
 worker_dir = os.getcwd()
-word_list="wordList.json";
+word_list="wordList.json"
 
 
 word_list_path = os.path.join(worker_dir, list_dir, word_list)
